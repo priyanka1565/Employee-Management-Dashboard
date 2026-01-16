@@ -4,11 +4,12 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { Form, Button, InputGroup } from "react-bootstrap";
+import { Form, Button, InputGroup, Spinner } from "react-bootstrap";
 import { login } from "../utils/auth";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -18,17 +19,20 @@ const Login = () => {
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
-    remember: Yup.boolean(),
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    login();
-    toast.success("Login successful");
-    
+    setLoading(true);
+
+    // simulate API call
     setTimeout(() => {
-    resetForm();
-    navigate("/dashboard");
-  }, 1000);
+      login();
+      toast.success("Login successful");
+
+      resetForm();
+      setLoading(false);
+      navigate("/dashboard");
+    }, 1200);
   };
 
   return (
@@ -38,29 +42,24 @@ const Login = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "16px",
         background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       }}
     >
-      <div style={{ width: "100%", maxWidth: "448px" }}>
+      <div style={{ width: "100%", maxWidth: "420px" }}>
         <div
           style={{
-            backgroundColor: "white",
-            borderRadius: "8px",
-            boxShadow:
-              "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+            backgroundColor: "#fff",
             padding: "32px",
+            borderRadius: "8px",
           }}
         >
-          {/* Header */}
           <div className="text-center mb-4">
-            <h2 className="fw-bold text-dark">Welcome Back</h2>
+            <h3 className="fw-bold">Welcome Back</h3>
             <p className="text-muted">Sign in to your account</p>
           </div>
 
-          {/* Formik Form */}
           <Formik
-            initialValues={{ email: "", password: "", remember: false }}
+            initialValues={{ email: "", password: "" }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
@@ -74,15 +73,12 @@ const Login = () => {
               <Form onSubmit={handleSubmit}>
                 {/* Email */}
                 <Form.Group className="mb-3">
-                  <Form.Label className="fw-semibold">
-                    Username
-                  </Form.Label>
+                  <Form.Label>Username</Form.Label>
                   <Form.Control
                     type="email"
                     name="email"
                     value={values.email}
                     onChange={handleChange}
-                    placeholder="Enter email"
                     isInvalid={touched.email && !!errors.email}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -90,63 +86,58 @@ const Login = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* Password with Eye Toggle */}
+                {/* Password */}
                 <Form.Group className="mb-3">
-                  <Form.Label className="fw-semibold">
-                    Password
-                  </Form.Label>
-
+                  <Form.Label>Password</Form.Label>
                   <InputGroup>
                     <Form.Control
                       type={showPassword ? "text" : "password"}
                       name="password"
                       value={values.password}
                       onChange={handleChange}
-                      placeholder="Password"
                       isInvalid={
                         touched.password && !!errors.password
                       }
                     />
-
                     <InputGroup.Text
-                      style={{ cursor: "pointer" }}
                       onClick={() =>
                         setShowPassword(!showPassword)
                       }
+                      style={{ cursor: "pointer" }}
                     >
                       {showPassword ? <FiEyeOff /> : <FiEye />}
                     </InputGroup.Text>
-
                     <Form.Control.Feedback type="invalid">
                       {errors.password}
                     </Form.Control.Feedback>
                   </InputGroup>
                 </Form.Group>
 
-                {/* Remember Me */}
-                <Form.Group className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    name="remember"
-                    checked={values.remember}
-                    onChange={handleChange}
-                    label="Remember me"
-                  />
-                </Form.Group>
-
-                {/* Submit Button */}
+                {/* Submit */}
                 <Button
                   type="submit"
-                  className="w-100 fw-semibold"
+                  className="w-100"
+                  disabled={loading}
                   style={{
                     padding: "12px",
-                    borderRadius: "8px",
                     background:
                       "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                     border: "none",
                   }}
                 >
-                  Submit
+                  {loading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        className="me-2"
+                      />
+                      Logging in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
               </Form>
             )}
