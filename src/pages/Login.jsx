@@ -23,8 +23,7 @@ const Login = () => {
 
   const handleSubmit = (values, { resetForm }) => {
     setLoading(true);
-
-    // simulate API call
+    localStorage.setItem("is_user", true);
     setTimeout(() => {
       login();
       toast.success("Login successful");
