@@ -22,7 +22,7 @@ const Login = () => {
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    if (values?.email !== "Sunil@123" || values?.password !== "123456") {
+    if (values?.email !== "Priyanka@123" || values?.password !== "123456") {
       toast.error("Invalid username or password")
       return
     }
