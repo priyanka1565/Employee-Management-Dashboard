@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -85,6 +85,7 @@ const EmployeeFormModal = ({ show, onHide, employee, onSave, states }) => {
 
   return (
     <Modal show={show} onHide={onHide} centered size="lg" backdrop="static">
+      <ToastContainer />
       <Modal.Header closeButton>
         <Modal.Title className="fw-bold">
           {employee ? "✏️ Edit Employee" : "➕ Add New Employee"}
@@ -104,19 +105,23 @@ const EmployeeFormModal = ({ show, onHide, employee, onSave, states }) => {
         validationSchema={validationSchema}
         onSubmit={(values, { resetForm }) => {
           onSave({ ...values, image: preview || values.image });
-          setSuccessMessage(
+          toast.success(
             employee
-              ? "Employee updated successfully!"
-              : "Employee added successfully!"
+              ? "Employee updated successfully 🎉"
+              : "Employee added successfully 🎉",
+            {
+              position: "top-right",
+              autoClose: 2000,
+              theme: "colored",
+            }
           );
-
           setTimeout(() => {
             resetForm();
             setPreview("");
-            setSuccessMessage("");
             onHide();
           }, 800);
         }}
+
       >
         {({
           values,
@@ -130,9 +135,9 @@ const EmployeeFormModal = ({ show, onHide, employee, onSave, states }) => {
         }) => (
           <Form onSubmit={handleSubmit} noValidate>
             <Modal.Body className="p-4">
-              {successMessage && (
+              {/* {successMessage && (
                 <Alert variant="success">{successMessage}</Alert>
-              )}
+              )} */}
               <Form.Group className="mb-3">
                 <Form.Label className="fw-semibold">
                   Full Name <span className="text-danger">*</span>
@@ -155,10 +160,13 @@ const EmployeeFormModal = ({ show, onHide, employee, onSave, states }) => {
                       name="gender"
                       value={values.gender}
                       onChange={handleChange}
+                      isInvalid={touched.gender && !!errors.gender}
                     >
+                      <option value="">Select Gender</option>
                       <option value="Male">🧑 Male</option>
                       <option value="Female">👩 Female</option>
                     </Form.Select>
+
                   </Form.Group>
                 </Col>
 

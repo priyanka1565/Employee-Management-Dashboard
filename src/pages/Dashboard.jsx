@@ -14,7 +14,7 @@ import EmployeeFormModal from '../components/EmployeeForm';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  
+
   const [employees, setEmployees] = useState([
     {
       id: 1,
@@ -39,7 +39,7 @@ const Dashboard = () => {
       name: 'Michael Johnson',
       gender: 'Male',
       dob: '1988-03-10',
-      state: 'Florida',
+      state: 'India',
       active: false,
       image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael'
     }
@@ -66,7 +66,6 @@ const Dashboard = () => {
       ...formData
     };
     setEmployees([...employees, newEmployee]);
-    alert('Employee added successfully!');
   };
 
   const handleEditEmployee = (formData) => {
@@ -76,13 +75,11 @@ const Dashboard = () => {
       )
     );
     setEditingEmployee(null);
-    alert('Employee updated successfully!');
   };
 
   const handleDeleteEmployee = (id) => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
       setEmployees(employees.filter((e) => e.id !== id));
-      alert('Employee deleted successfully!');
     }
   };
 
@@ -176,6 +173,11 @@ const Dashboard = () => {
     printWindow.document.close();
     setTimeout(() => printWindow.print(), 250);
   };
+
+  const logout = () => {
+    localStorage.removeItem("is_user");
+    navigate("/login")
+  }
 
   const filteredEmployees = employees.filter((emp) => {
     const matchesSearch = emp.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -308,6 +310,13 @@ const Dashboard = () => {
               onClick={handlePrint}
             >
               🖨️ Print
+            </Button>
+            <Button
+              className="fw-semibold shadow"
+              variant="outline-primary"
+              onClick={logout}
+            >
+              Logout
             </Button>
           </Col>
         </Row>

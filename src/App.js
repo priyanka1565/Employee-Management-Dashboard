@@ -1,7 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import AllRoutes from './routes/AllRoutes';
-import { ToastContainer } from 'react-bootstrap';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {

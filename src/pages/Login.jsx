@@ -22,6 +22,10 @@ const Login = () => {
   });
 
   const handleSubmit = (values, { resetForm }) => {
+    if (values?.email !== "Sunil@123" || values?.password !== "123456") {
+      toast.error("Invalid username or password")
+      return
+    }
     setLoading(true);
     localStorage.setItem("is_user", true);
     setTimeout(() => {
