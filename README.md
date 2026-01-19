@@ -68,6 +68,7 @@ a3. uth=true is stored in localStorage
 4. User is redirected to Dashboard
 
 5. Logout clears auth data and redirects to Login
+6. Login credential : username : Priyanka@123 password: 123456
 
 ## UI / UX Design Decisions
 
